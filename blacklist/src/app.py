@@ -8,6 +8,7 @@ from werkzeug.exceptions import HTTPException
 
 from src.blueprints.blacklist import blacklists_blueprint
 from src.blueprints.health_check import health_check_blueprint
+from src.blueprints.email_registration import email_registration_blueprint
 from src.database import db
 from src.errors.errors import ApiError
 
@@ -36,7 +37,7 @@ with app.app_context():
 
 app.register_blueprint(health_check_blueprint)
 app.register_blueprint(blacklists_blueprint)
-
+app.register_blueprint(email_registration_blueprint)
 
 @app.errorhandler(Exception)
 def handle_exception(err):

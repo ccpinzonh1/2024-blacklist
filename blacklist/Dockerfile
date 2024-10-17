@@ -19,6 +19,7 @@ COPY . .
 # Set environment variables using the ENV command
 ENV VERSION=1.0
 ENV FLASK_APP=src/app.py
+ENV PYTHONUNBUFFERED=1
 
 # Expose the port the app runs on
 EXPOSE 3000
