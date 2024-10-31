@@ -9,14 +9,12 @@ phases:
       - docker pull postgres:10.6-alpine
   pre_build:
     commands:
-      - cd blacklist
       - pipenv install --dev
       - docker run --rm --name blacklist_test_db -p 5432:5432 -e POSTGRES_PASSWORD=postgres -d postgres:10.6-alpine
       - echo "Logging in to Amazon ECR..."
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
   build:
     commands:
-      - cd blacklist
       - echo "Running tests..."
       - pipenv run pytest --cov=src -v -s --cov-fail-under=70
       - echo "Building the Docker image..."
@@ -25,7 +23,6 @@ phases:
       - docker tag blacklist:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/blacklist:latest
   post_build:
     commands:
-      - cd blacklist
       - echo Stopping postgres container
       - docker container stop blacklist_test_db
       - echo "Pushing the Docker image to ECR..."
