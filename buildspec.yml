@@ -13,6 +13,8 @@ phases:
       - echo "Logging in to Amazon ECR..."
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
       - docker run --rm --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=postgres -d postgres:10.6-alpine
+      - echo "Waiting for PostgreSQL to be ready..."
+      - until docker exec postgres pg_isready; do sleep 1; done
   build:
     commands:
       - echo "logs..."
